@@ -1,0 +1,62 @@
+import example.*
+
+describe "name" {
+    const grifo = new Criaturas(salud = 1000)
+    const harry = new Estudiantes(casaHowards = gryffindor, sangrePura = true, salud= 100, habilidad = 1000)
+    const ron = new Estudiantes(casaHowards = gryffindor, sangrePura = true, salud = 100, habilidad = 600)
+    const hermioni = new Estudiantes(casaHowards = gryffindor, sangrePura = false, salud = 100, habilidad = 600)
+    const ridiculus = new HechizosComunes(nivelDificultad = 5)
+    const artesOscuras = new Materias(profesor = "snape", hechizo = ridiculus)
+
+
+    const inmobilus = new HechizosComunes(nivelDificultad = 5)
+    const defensaArtesOscuras = new Materias(profesor ="Severus", hechizo = inmobilus)
+    const harry1 = new Estudiantes(casaHowards= gryffindor,sangrePura = true,salud = 100,habilidad = 8)     // habilidad 8 (suficiente)
+    const draco = new Estudiantes(casaHowards =gryffindor, sangrePura = true, salud = 100, habilidad = 5)     // habilidad 5 (insuficiente)
+    const hermione1 = new Estudiantes(casaHowards = gryffindor, sangrePura = false, salud = 100, habilidad = 1) // habilidad 9 (suficiente)
+    const ron1 = new Estudiantes(casaHowards= gryffindor, sangrePura =true,salud = 100, habilidad = 1)      // habilidad 10 (suficiente pero NO inscrito)
+    const lechuza = new Criaturas(salud = 50)
+
+
+    method initialize(){
+    harry.inscribirse(artesOscuras)
+    ron.inscribirse(artesOscuras)
+    hermioni.inscribirse(artesOscuras)
+    artesOscuras.enseña()
+    artesOscuras.practica(grifo)
+    }
+
+    test "la materia de artes oscuras enseña ridiculus y practica contra un grifo" {
+        assert.equals(ridiculus, artesOscuras.hechizo())
+        assert.equals(955, grifo.salud())
+    }
+
+    test "nose" {
+    harry1.inscribirse(defensaArtesOscuras)
+    draco.inscribirse(defensaArtesOscuras)
+    hermione1.inscribirse(defensaArtesOscuras)
+    defensaArtesOscuras.enseña()
+
+
+    harry.aprenderHechizo(inmobilus)
+    harry.ejercitacion(lechuza)
+    assert.equals(35, lechuza.salud())
+
+    }
+
+    test "Draco falla por habilidad insuficiente" {
+    draco.inscribirse(defensaArtesOscuras)
+    defensaArtesOscuras.enseña()
+    draco.aprenderHechizo(inmobilus)
+    assert.throwsException({
+        draco.ejercitacion(lechuza)
+    })
+    }
+
+    test "ron no puede hacer el hechizo por falta de habilidad" {
+    ron1.aprenderHechizo(inmobilus) // aprende el hechizo
+    assert.throwsException({
+        ron1.ejercitacion(lechuza) // como su habilidad es 1, no debería poder
+    })
+}
+}    
